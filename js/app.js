@@ -313,7 +313,7 @@ $("#obox").addEventListener("submit", e => {
 });
 
 /* 창업교육 */
-$("#acImg").src = document.querySelector(".hero-img").src;
+$("#acImg").src = "images/hero-office.webp";
 phoneFmt($("#aPhone"));
 $("#aform").addEventListener("submit", e => {
   e.preventDefault();

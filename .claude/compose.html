@@ -1,0 +1,76 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>hero composer</title>
+<style>body{margin:0;background:#111;color:#eee;font:13px system-ui}canvas{display:block;width:100%;max-width:1200px}#log{padding:8px}</style>
+<div id="log">working…</div>
+<canvas id="cv"></canvas>
+<script>
+const q = new URLSearchParams(location.search);
+const num = (k, d) => q.has(k) ? +q.get(k) : d;
+
+const P = {
+  W: 1900, H: 500,
+  sy: num('sy', 90), sh: num('sh', 526),      /* 배경에서 잘라낼 세로 범위 */
+  px: num('px', 758), py: num('py', 16),      /* 인물 배치 */
+  ps: num('ps', 0.613),                       /* 인물 축소 배율 */
+  key: num('key', 12),                        /* 검은 배경 판정 임계값 */
+  feather: num('feather', 1.2)
+};
+
+const load = src => new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = src; });
+
+/* 가장자리에서 번져 들어가며 검은 배경만 제거 (머리카락 같은 어두운 내부는 보존) */
+function cutout(img, thr, feather) {
+  const w = img.width, h = img.height;
+  const c = document.createElement('canvas'); c.width = w; c.height = h;
+  const x = c.getContext('2d', { willReadFrequently: true });
+  x.drawImage(img, 0, 0);
+  const id = x.getImageData(0, 0, w, h), d = id.data;
+  const bg = new Uint8Array(w * h);
+  const stack = [];
+  const isDark = i => d[i * 4] <= thr && d[i * 4 + 1] <= thr && d[i * 4 + 2] <= thr;
+  for (let X = 0; X < w; X++) { stack.push(X, (h - 1) * w + X); }
+  for (let Y = 0; Y < h; Y++) { stack.push(Y * w, Y * w + w - 1); }
+  while (stack.length) {
+    const i = stack.pop();
+    if (bg[i] || !isDark(i)) continue;
+    bg[i] = 1;
+    const X = i % w, Y = (i / w) | 0;
+    if (X > 0) stack.push(i - 1);
+    if (X < w - 1) stack.push(i + 1);
+    if (Y > 0) stack.push(i - w);
+    if (Y < h - 1) stack.push(i + w);
+  }
+  for (let i = 0; i < w * h; i++) if (bg[i]) d[i * 4 + 3] = 0;
+  x.putImageData(id, 0, 0);
+  if (feather) {   /* 가장자리를 살짝 부드럽게 */
+    const c2 = document.createElement('canvas'); c2.width = w; c2.height = h;
+    const x2 = c2.getContext('2d');
+    x2.filter = `blur(${feather}px)`; x2.drawImage(c, 0, 0);
+    x2.filter = 'none'; x2.globalCompositeOperation = 'source-atop'; x2.drawImage(c, 0, 0);
+    return c2;
+  }
+  return c;
+}
+
+(async () => {
+  const [office, portrait] = await Promise.all([load('/images/hero-office.webp'), load('/images/ceo-portrait.webp')]);
+  const cv = document.getElementById('cv');
+  cv.width = P.W; cv.height = P.H;
+  const g = cv.getContext('2d');
+
+  g.drawImage(office, 0, P.sy, office.width, P.sh, 0, 0, P.W, P.H);
+  const cut = cutout(portrait, P.key, P.feather);
+  g.drawImage(cut, P.px, P.py, cut.width * P.ps, cut.height * P.ps);
+
+  document.getElementById('log').textContent =
+    'portrait ' + cut.width + 'x' + cut.height + ' → ' + Math.round(cut.width * P.ps) + 'x' + Math.round(cut.height * P.ps) +
+    ' at (' + P.px + ',' + P.py + ')  params=' + JSON.stringify(P);
+
+  window.saveAs = (name, type, qlt) => new Promise(r => cv.toBlob(async b => {
+    const res = await fetch('/__save?path=' + encodeURIComponent(name), { method: 'POST', body: b });
+    r((await res.text()) + ' (' + Math.round(b.size / 1024) + 'KB)');
+  }, type || 'image/webp', qlt || 0.9));
+  window.ready = true;
+})();
+</script>
