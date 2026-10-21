@@ -6,7 +6,10 @@
 const CONFIG = {
   phone: "1588-9097",
   openChatUrl: "https://open.kakao.com/o/s1om9Ovi",          /* ← 카카오톡 오픈채팅방 링크 (https://open.kakao.com/o/...) */
-  kakaoId: "gganbu0"        /* 오픈채팅 링크가 비어 있을 때 대신 복사되는 카톡 ID */
+  kakaoId: "gganbu0",       /* 오픈채팅 링크가 비어 있을 때 대신 복사되는 카톡 ID */
+  /* 신청·문의를 받을 주소. Google Apps Script 웹앱 URL을 넣으면 시트 저장 + 알림이 동작합니다.
+     비워두면 폼 대신 카톡·전화로 안내합니다. 설정 방법은 server/README.md 참고 */
+  formEndpoint: ""
 };
 /* 표창 사진 (data URI). 비워두면 '사진 준비 중' 표시 */
 
@@ -96,6 +99,50 @@ const ICONS = {
 };
 const ico = k => `<span class="ico"><svg viewBox="0 0 24 24">${ICONS[k]}</svg></span>`;
 const kakaoHref = () => CONFIG.openChatUrl || "#";
+const telHref = () => CONFIG.phone.replace(/\D/g, "");
+
+/* ==================================================================
+   접수 전송 — CONFIG.formEndpoint 로 POST
+   ================================================================== */
+const receiptNo = () => {
+  const d = new Date(), z = n => String(n).padStart(2, "0");
+  return "GA-" + String(d.getFullYear()).slice(2) + z(d.getMonth() + 1) + z(d.getDate()) + "-" + String(Math.floor(Math.random() * 9000) + 1000);
+};
+async function sendForm(kind, fields) {
+  if (!CONFIG.formEndpoint) return { ok: false, reason: "unset" };
+  const no = receiptNo();
+  try {
+    /* text/plain 으로 보내 사전 요청(preflight) 없이 바로 전송 */
+    const res = await fetch(CONFIG.formEndpoint, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ no, kind, fields, at: new Date().toISOString(), page: location.href })
+    });
+    if (!res.ok) return { ok: false, reason: "HTTP " + res.status };
+    const out = await res.json().catch(() => null);
+    if (out && out.ok === false) return { ok: false, reason: out.error || "서버 오류" };
+    return { ok: true, no: (out && out.no) || no };
+  } catch (e) {
+    return { ok: false, reason: (e && e.message) || "네트워크 오류" };
+  }
+}
+/* 접수처가 아직 연결되지 않았거나 전송이 실패했을 때의 안내 */
+function fallbackBox(title, note) {
+  return `<div class="okbox"><p style="font-weight:900;font-size:18px">${title}</p>
+    <p style="color:var(--sub)">${note}</p>
+    <div class="ok-acts"><a class="btn btn-kakao" data-kakao href="${kakaoHref()}" target="_blank" rel="noopener">카톡으로 접수하기</a><a class="btn btn-line" href="tel:${telHref()}">전화 ${CONFIG.phone}</a></div>
+    <p class="hint">오전 10시 ~ 새벽 2시 · 주말·공휴일 포함</p></div>`;
+}
+function unsentNote(r) {
+  return r.reason === "unset"
+    ? ["지금은 카톡·전화로 접수받고 있습니다", "온라인 접수는 준비 중입니다. 아래로 연락 주시면 바로 도와드리겠습니다."]
+    : ["접수가 전송되지 않았습니다", "일시적인 오류입니다(" + r.reason + "). 번거로우시겠지만 아래로 연락 주세요."];
+}
+async function busy(btn, label, fn) {
+  const old = btn.innerHTML, w = btn.offsetWidth;
+  btn.disabled = true; btn.style.minWidth = w + "px"; btn.textContent = label;
+  try { return await fn(); } finally { btn.disabled = false; btn.innerHTML = old; btn.style.minWidth = ""; }
+}
 
 /* 토스트·복사·카톡 */
 const toast = $("#toast"); let tt;
@@ -132,15 +179,23 @@ $("#pgrid").innerHTML = PLATFORMS.map(p => {
 /* 홈: 문의 폼 */
 $("#cPlat").innerHTML = PLATFORMS.map(p => `<label class="pill"><input type="checkbox" value="${p.short}"><span>${mark(p.id)}${p.short}</span></label>`).join("");
 phoneFmt($("#cPhone"));
-$("#cform").addEventListener("submit", e => {
+$("#cform").addEventListener("submit", async e => {
   e.preventDefault();
   const err = $("#cErr"), fail = (m, el) => { err.textContent = m; err.hidden = false; el.focus(); };
   err.hidden = true;
   if (!$("#cName").value.trim()) return fail("이름을 입력해 주세요.", $("#cName"));
   if (!phoneOk($("#cPhone").value)) return fail("연락처를 확인해 주세요. 예) 010-1234-5678", $("#cPhone"));
   if (!$("#cAgree").checked) return fail("개인정보 수집·이용에 동의해 주세요.", $("#cAgree"));
-  /* 다음 단계: Supabase 저장 + 텔레그램 알림 */
-  $("#cform").innerHTML = `<div class="okbox" style="align-content:center;min-height:360px"><p style="font-size:44px;line-height:1;color:var(--blue)">✓</p><p style="font-weight:900;font-size:20px">상담 신청이 접수되었습니다</p><p style="color:var(--sub)">입력하신 번호로 바로 연락드리겠습니다.<br>급하시면 대표 번호 <b>${CONFIG.phone}</b>로 전화 주세요.</p><p class="hint">미리보기 화면입니다. 실제 저장·알림은 다음 단계 연결 후 작동합니다.</p></div>`;
+  const r = await busy(e.submitter || $("#cform button[type=submit]"), "접수 중…", () => sendForm("상담 문의", {
+    "고객 유형": document.querySelector("input[name=ct]:checked").value,
+    "관심 플랫폼": [...document.querySelectorAll("#cPlat input:checked")].map(i => i.value).join(", ") || "-",
+    "이름": $("#cName").value.trim(),
+    "업체명": $("#cCo").value.trim() || "-",
+    "연락처": $("#cPhone").value,
+    "문의 내용": $("#cMsg").value.trim() || "-"
+  }));
+  if (!r.ok) { const [t, n] = unsentNote(r); $("#cform").innerHTML = fallbackBox(t, n); return; }
+  $("#cform").innerHTML = `<div class="okbox" style="align-content:center;min-height:360px"><p style="font-size:44px;line-height:1;color:var(--blue)">✓</p><p style="font-weight:900;font-size:20px">상담 신청이 접수되었습니다</p><p class="no num">${r.no}</p><p style="color:var(--sub)">입력하신 번호로 바로 연락드리겠습니다.<br>급하시면 대표 번호 <b>${CONFIG.phone}</b>로 전화 주세요.</p></div>`;
 });
 
 /* 무료체험 · 간편가입 팝업 */
@@ -174,8 +229,8 @@ function openSignup() {
   $("#dim").hidden = false; document.body.style.overflow = "hidden";
   phoneFmt($("#mPhone"));
   $("#mx").onclick = closeModal;
-  $("#modal").querySelectorAll("[data-sns]").forEach(b => b.onclick = () => show(`${b.dataset.sns} 간편가입은 실제 오픈 시 연결됩니다 (미리보기)`));
-  $("#mGo").onclick = () => {
+  $("#modal").querySelectorAll("[data-sns]").forEach(b => b.onclick = () => show(`${b.dataset.sns} 간편가입은 준비 중입니다. 아래 휴대폰 번호로 신청해 주세요`));
+  $("#mGo").onclick = async () => {
     const err = $("#mErr"), fail = (m, el) => { err.textContent = m; err.hidden = false; el.focus(); };
     err.hidden = true;
     const co = $("#mCo").value.trim(), phone = $("#mPhone").value;
@@ -184,16 +239,27 @@ function openSignup() {
     if (!$("#mAg1").checked) return fail("필수 약관에 동의해 주세요.", $("#mAg1"));
     store.set({ co, phone });
     const x = byId(document.querySelector("input[name=tr]:checked").value);
-    $("#mBody").innerHTML = `<div class="okbox"><p style="font-weight:900;font-size:19px">가입 완료! 쿠폰이 발급되었습니다</p>
+    const r = await busy($("#mGo"), "신청 중…", () => sendForm("무료체험 신청", {
+      "받을 체험": x.name.replace(/ \(.*\)/, "") + " · " + x.trial,
+      "업체명": co,
+      "연락처": phone,
+      "소식 수신": $("#mAg2").checked ? "동의" : "미동의"
+    }));
+    if (!r.ok) { const [t, n] = unsentNote(r); $("#mBody").innerHTML = fallbackBox(t, n); return; }
+    $("#mBody").innerHTML = `<div class="okbox"><p style="font-weight:900;font-size:19px">신청이 접수되었습니다</p>
+      <p class="no num">${r.no}</p>
       <p style="color:var(--sub)">${x.name.replace(/ \(.*\)/, "")} · ${x.trial}</p>
-      <div style="width:100%;text-align:left"><label class="lbl" for="mUrl">체험할 주소 (URL)</label><input class="inp" id="mUrl" type="url" inputmode="url" placeholder="https://"></div>
+      <div style="width:100%;text-align:left"><label class="lbl" for="mUrl">체험할 주소 (URL) <span style="color:var(--muted);font-weight:500">· 지금 알려주시면 더 빠릅니다</span></label><input class="inp" id="mUrl" type="url" inputmode="url" placeholder="https://"></div>
       <p class="err" id="mErr2" hidden></p>
-      <button class="btn btn-blue" type="button" id="mGo2" style="width:100%;height:48px">무료체험 신청하기</button>
-      <p class="hint">미리보기 화면입니다. 실제 가입·저장은 다음 단계 연결 후 작동합니다.</p></div>`;
-    $("#mGo2").onclick = () => {
+      <button class="btn btn-blue" type="button" id="mGo2" style="width:100%;height:48px">주소 보내기</button>
+      <button class="btn btn-line btn-sm" type="button" onclick="closeModal()">나중에 알려드릴게요</button></div>`;
+    $("#mGo2").onclick = async () => {
       if (!/^https?:\/\/\S+\.\S+/.test($("#mUrl").value.trim())) { $("#mErr2").textContent = "주소를 https:// 로 시작하게 입력해 주세요."; $("#mErr2").hidden = false; return; }
-      /* 다음 단계: Supabase 저장 + 텔레그램 알림 */
-      $("#mBody").innerHTML = `<div class="okbox"><p style="font-weight:900;font-size:19px">무료체험 신청 완료</p><p class="no num">GA-${String(Date.now()).slice(-5)}</p><p style="color:var(--sub)">확인 후 입력하신 번호로 연락드립니다.</p><button class="btn btn-line" type="button" onclick="closeModal()">닫기</button></div>`;
+      const r2 = await busy($("#mGo2"), "전송 중…", () => sendForm("무료체험 주소", {
+        "접수번호": r.no, "업체명": co, "연락처": phone, "체험 주소": $("#mUrl").value.trim()
+      }));
+      if (!r2.ok) { const [t, n] = unsentNote(r2); $("#mBody").innerHTML = fallbackBox(t, n); return; }
+      $("#mBody").innerHTML = `<div class="okbox"><p style="font-weight:900;font-size:19px">무료체험 신청 완료</p><p class="no num">${r.no}</p><p style="color:var(--sub)">확인 후 입력하신 번호로 연락드립니다.</p><button class="btn btn-line" type="button" onclick="closeModal()">닫기</button></div>`;
     };
   };
   setTimeout(() => $("#mx").focus(), 30);
@@ -291,7 +357,7 @@ $("#oQty").onchange = () => oSet(parseQ($("#oQty").value));
 $("#mbGo").onclick = () => $("#obox").scrollIntoView({ behavior: "smooth", block: "start" });
 phoneFmt($("#oPhone"));
 (() => { const me = store.get(); if (me.co) { $("#oCo").value = me.co; $("#oPhone").value = me.phone || ""; $("#oAgree").checked = true; } })();
-$("#obox").addEventListener("submit", e => {
+$("#obox").addEventListener("submit", async e => {
   e.preventDefault();
   const err = $("#oErr"), fail = (m, el) => { err.textContent = m; err.hidden = false; el.focus(); };
   err.hidden = true;
@@ -302,28 +368,45 @@ $("#obox").addEventListener("submit", e => {
   if (!phoneOk(phone)) return fail("연락처를 확인해 주세요. 예) 010-1234-5678", $("#oPhone"));
   if (!$("#oAgree").checked) return fail("개인정보 수집·이용에 동의해 주세요.", $("#oAgree"));
   store.set({ co, phone });
-  /* 다음 단계: Supabase 저장 + 텔레그램 알림 */
-  const no = "GA-" + String(Date.now()).slice(-5);
-  $("#oDone").innerHTML = `<div class="okbox"><p style="font-weight:900">신청이 접수되었습니다</p><p class="no num">${no}</p><p>${x.name} · ${qTxt(x, q)} · ${total(x, q)}</p>
-    <p class="pay"><b>결제 안내</b><br>확인 연락 때 계좌이체 정보를 안내드립니다. 입금 확인 후 바로 진행합니다.</p>
-    <button class="btn btn-blue btn-sm" type="button" data-copy="${no}">신청번호 복사</button>
-    <p class="hint">미리보기 화면입니다. 실제 저장·알림은 다음 단계 연결 후 작동합니다.</p></div>`;
+  const r = await busy(e.submitter || $("#obox button[type=submit]"), "접수 중…", () => sendForm("상품 신청", {
+    "플랫폼": plat(x.p).name,
+    "상품": x.name,
+    "수량": qTxt(x, q),
+    "예상 금액": total(x, q),
+    "작업 주소": $("#oUrl").value.trim(),
+    "업체명": co,
+    "연락처": phone
+  }));
   $("#oForm").hidden = true; $("#oDone").hidden = false;
+  if (!r.ok) {
+    const [t, n] = unsentNote(r);
+    $("#oDone").innerHTML = fallbackBox(t, n + "<br><b>" + x.name + " · " + qTxt(x, q) + " · " + total(x, q) + "</b>");
+  } else {
+    $("#oDone").innerHTML = `<div class="okbox"><p style="font-weight:900">신청이 접수되었습니다</p><p class="no num">${r.no}</p><p>${x.name} · ${qTxt(x, q)} · ${total(x, q)}</p>
+      <p class="pay"><b>결제 안내</b><br>확인 연락 때 계좌이체 정보를 안내드립니다. 입금 확인 후 바로 진행합니다.</p>
+      <button class="btn btn-blue btn-sm" type="button" data-copy="${r.no}">신청번호 복사</button></div>`;
+  }
   $("#obox").scrollIntoView({ behavior: "smooth", block: "start" });
 });
 
 /* 창업교육 */
 $("#acImg").src = "images/hero-office.webp";
 phoneFmt($("#aPhone"));
-$("#aform").addEventListener("submit", e => {
+$("#aform").addEventListener("submit", async e => {
   e.preventDefault();
   const err = $("#aErr"), fail = (m, el) => { err.textContent = m; err.hidden = false; el.focus(); };
   err.hidden = true;
   if (!$("#aName").value.trim()) return fail("이름을 입력해 주세요.", $("#aName"));
   if (!phoneOk($("#aPhone").value)) return fail("연락처를 확인해 주세요. 예) 010-1234-5678", $("#aPhone"));
   if (!$("#aAgree").checked) return fail("개인정보 수집·이용에 동의해 주세요.", $("#aAgree"));
-  /* 다음 단계: Supabase 저장 + 텔레그램 알림 */
-  $("#aform").innerHTML = `<div class="okbox" style="min-height:280px;align-content:center"><p style="font-size:40px;line-height:1;color:var(--blue)">✓</p><p style="font-weight:900;font-size:19px">교육 문의가 접수되었습니다</p><p style="color:var(--sub)">확인 후 입력하신 번호로 연락드리겠습니다.</p><p class="hint">미리보기 화면입니다. 실제 저장·알림은 다음 단계 연결 후 작동합니다.</p></div>`;
+  const r = await busy(e.submitter || $("#aform button[type=submit]"), "접수 중…", () => sendForm("창업교육 문의", {
+    "이름": $("#aName").value.trim(),
+    "연락처": $("#aPhone").value,
+    "현재 상황": document.querySelector("input[name=as]:checked").value,
+    "궁금한 점": $("#aMsg").value.trim() || "-"
+  }));
+  if (!r.ok) { const [t, n] = unsentNote(r); $("#aform").innerHTML = fallbackBox(t, n); return; }
+  $("#aform").innerHTML = `<div class="okbox" style="min-height:280px;align-content:center"><p style="font-size:40px;line-height:1;color:var(--blue)">✓</p><p style="font-weight:900;font-size:19px">교육 문의가 접수되었습니다</p><p class="no num">${r.no}</p><p style="color:var(--sub)">확인 후 입력하신 번호로 연락드리겠습니다.</p></div>`;
 });
 
 /* 페이지 전환 */

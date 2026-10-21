@@ -12,6 +12,21 @@ const types = {
 };
 
 http.createServer((req, res) => {
+  // 개발용: 접수 폼 테스트를 위한 가짜 접수처 (POST /__form)
+  if (req.method === 'POST' && req.url.startsWith('/__form')) {
+    const chunks = [];
+    req.on('data', c => chunks.push(c));
+    req.on('end', () => {
+      const body = Buffer.concat(chunks).toString('utf8');
+      console.log('[__form] ' + body);
+      let no = 'GA-MOCK';
+      try { no = JSON.parse(body).no || no; } catch (e) {}
+      res.writeHead(200, { 'content-type': 'application/json; charset=utf-8', 'access-control-allow-origin': '*' });
+      res.end(JSON.stringify({ ok: true, no: no }));
+    });
+    return;
+  }
+
   // 개발용: 브라우저에서 합성한 이미지를 파일로 저장 (POST /__save?path=images/foo.webp)
   if (req.method === 'POST' && req.url.startsWith('/__save')) {
     const rel = decodeURIComponent(new URL(req.url, 'http://x').searchParams.get('path') || '');

@@ -898,3 +898,8 @@ body.lbox-on{overflow:hidden}
   .aw-grid figcaption b{font-size:12px}
   .aw-grid figcaption small{font-size:10px;padding:1px 7px}
 }
+
+/* 접수 결과 박스의 연락 버튼 */
+.okbox .ok-acts{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:2px}
+.okbox .ok-acts .btn{min-width:150px}
+@media(max-width:420px){.okbox .ok-acts .btn{width:100%}}
