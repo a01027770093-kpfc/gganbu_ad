@@ -14,10 +14,10 @@ images/         로고 · 배너 · 플랫폼 이미지
 ## 로컬에서 보기
 
 ```bash
-python -m http.server 8000
+node .claude/serve.js
 ```
 
-브라우저에서 http://localhost:8000 접속.
+브라우저에서 http://localhost:8777 접속.
 
 ## 배포
 
