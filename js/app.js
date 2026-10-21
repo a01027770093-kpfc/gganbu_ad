@@ -244,7 +244,7 @@ function renderProd(pid) {
     <div><h3><svg viewBox="0 0 24 24" class="b">${ICONS.users}</svg>왜 깐부애드인가</h3><ul>${p.us.map(s => `<li>${s}</li>`).join("")}</ul></div>`;
   const isAbly = pid === "ably";
   $("#pvListTitle").textContent = isAbly ? "운영 상품 · 패키지" : "운영 상품 · 대행사 단가";
-  $("#pvListSub").textContent = isAbly ? "에이블리 마켓 운영에 필요한 핵심 지표를 한 번에, 합리적인 가격으로 시작할 수 있습니다." : "아래는 모두 대행사·실행사 단가입니다. 수량을 누르면 금액이 바뀌고, 신청 박스에 반영됩니다. 동일 상품 1만 건 이상은 단가 문의 바랍니다.";
+  $("#pvListSub").textContent = isAbly ? "핵심 지표를 한 번에, 월 패키지로." : "모두 대행사·실행사 단가입니다. 수량을 누르면 금액이 바뀝니다.";
   $("#pvNote").textContent = p.note;
   $("#pvLinks").innerHTML = isAbly ? `<div class="links">
       <button class="lk" type="button" data-signup>${ico("gift")}<span><b>3일 무료체험 받기</b><small>간편가입하면 에이블리 활성화 3일 무료체험 쿠폰을 드립니다.</small></span></button>
@@ -342,3 +342,22 @@ function route() {
 }
 addEventListener("hashchange", route);
 route();
+
+/* 이미지 크게 보기 */
+const lbox = $("#lbox");
+function openLbox(src, alt) {
+  const im = $("#lboxImg");
+  im.src = src; im.alt = alt || "";
+  lbox.hidden = false; lbox.classList.remove("zoom");
+  document.body.classList.add("lbox-on");
+  $("#lboxX").focus();
+}
+function closeLbox() { lbox.hidden = true; document.body.classList.remove("lbox-on"); }
+document.addEventListener("click", e => {
+  const z = e.target.closest("[data-zoom]");
+  if (z) { const im = z.querySelector("img"); openLbox(z.dataset.zoom, im && im.alt); return; }
+  if (lbox.hidden) return;
+  if (e.target.closest("#lboxX") || e.target === lbox || e.target === $("#lboxBody")) { closeLbox(); return; }
+  if (e.target.closest("#lboxImg")) lbox.classList.toggle("zoom");
+});
+addEventListener("keydown", e => { if (e.key === "Escape" && !lbox.hidden) closeLbox(); });
