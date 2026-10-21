@@ -9,7 +9,7 @@ const CONFIG = {
   kakaoId: "gganbu0",       /* 오픈채팅 링크가 비어 있을 때 대신 복사되는 카톡 ID */
   /* 신청·문의를 받을 주소. Google Apps Script 웹앱 URL을 넣으면 시트 저장 + 알림이 동작합니다.
      비워두면 폼 대신 카톡·전화로 안내합니다. 설정 방법은 server/README.md 참고 */
-  formEndpoint: ""
+  formEndpoint: "https://script.google.com/macros/s/AKfycbw2EX1HAfiL2d1w6Zjnp9NLOkKI6JxIYS460gsZiVubnmn0VEwRshvEWJM53lB92hiq/exec"
 };
 /* 표창 사진 (data URI). 비워두면 '사진 준비 중' 표시 */
 
