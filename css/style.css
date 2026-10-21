@@ -89,22 +89,32 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 /* 히어로 */
 .hero{position:relative;background:var(--navy2);color:#fff;overflow:hidden}
 .hero-media{position:absolute;inset:0}
-.hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:68% 30%;display:block}
+.hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:62% 42%;display:block}
 .hero-cap{display:none}
-.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,22,60,.88) 0%,rgba(8,22,60,.55) 38%,rgba(8,22,60,0) 62%)}
-.hero .wrap{position:relative;z-index:1;min-height:clamp(460px,44vw,600px);display:flex;align-items:center;padding-block:56px}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,22,60,.92) 0%,rgba(8,22,60,.74) 34%,rgba(8,22,60,.18) 62%,rgba(8,22,60,0) 78%)}
+.hero .wrap{position:relative;z-index:1;min-height:clamp(420px,38vw,540px);display:flex;align-items:center;padding-block:52px}
 .hero-txt{max-width:560px}
 .hero .eyebrow{color:#8fb4ff}
 .hero h1{font-size:clamp(32px,3.9vw,52px);font-weight:900;line-height:1.24;margin-top:14px}
-.hero h1 span{color:#7fb0ff}
-.hero .lead{font-size:clamp(15px,1.4vw,18px);color:#d4def5;margin-top:16px}
+.hero h1 span{color:#5ad9f5}
+.hero .lead{font-size:clamp(15px,1.4vw,18px);color:#d4def5;margin-top:18px}
+.hero .lead b{color:#fff;font-weight:800}
 .hero .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px}
-.hero-pts{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:28px;font-size:13.5px;color:#c4d2f0}
-.hero-pts span{display:flex;align-items:center;gap:6px}
-.hero-pts span::before{content:"";width:6px;height:6px;border-radius:50%;background:#7fb0ff}
+.hero-quote{margin-top:26px;padding-left:12px;border-left:3px solid #5ad9f5;font-size:14.5px;font-weight:700;color:#bcd6ff}
+.hero-quote::before{content:"“"}
+.hero-quote::after{content:"”"}
+.hero-feat{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.12);background:rgba(6,16,42,.62);backdrop-filter:blur(6px)}
+.hero .hero-feat .wrap{min-height:0;display:grid;grid-template-columns:repeat(4,1fr);gap:10px 22px;padding-block:18px}
+.hf{display:flex;align-items:center;gap:12px;min-width:0}
+.hf-ico{flex:none;width:38px;height:38px;border-radius:10px;display:grid;place-items:center;background:rgba(90,217,245,.14);border:1px solid rgba(90,217,245,.3)}
+.hf-ico svg{width:20px;height:20px;fill:none;stroke:#5ad9f5;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.hf b{display:block;font-size:14.5px;font-weight:800;color:#fff;letter-spacing:-.02em}
+.hf small{display:block;font-size:12.5px;line-height:1.45;color:#aebfe0;margin-top:2px}
+@media(max-width:999px){.hero .hero-feat .wrap{grid-template-columns:1fr 1fr;gap:12px;padding-block:16px}.hf small{display:none}}
+@media(max-width:420px){.hf b{font-size:13.5px}.hf-ico{width:34px;height:34px}}
 @media(max-width:820px){
   .hero-media{position:relative;aspect-ratio:4/3;max-height:70vh;width:100%}
-  .hero-img{object-position:64% 35%}
+  .hero-img{object-position:58% 40%}
   .hero-media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,22,60,0) 38%,rgba(8,22,60,.72) 68%,var(--navy2) 100%)}
   .hero-cap{display:block;position:absolute;left:0;right:0;bottom:0;z-index:1;padding:0 max(20px,env(safe-area-inset-right,0px)) 18px max(20px,env(safe-area-inset-left,0px))}
   .hero-cap p{font-size:12px;font-weight:700;letter-spacing:.14em;color:#8fb4ff}
@@ -403,8 +413,9 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .ico svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 .pv{position:relative;overflow:hidden;background:linear-gradient(180deg,var(--pbg) 0%,#fff 100%)}
 .pv::before{content:"";position:absolute;right:-120px;top:-160px;width:620px;height:520px;border-radius:50%;background:radial-gradient(closest-side,var(--pglow),transparent);pointer-events:none}
-.pv-wm{position:absolute;z-index:0;pointer-events:none;opacity:.22;width:min(20vw,250px);height:auto;right:max(2vw,calc(50% - 650px + 420px));top:6px;transform:rotate(-6deg);filter:saturate(.85)}
-@media(max-width:999px){.pv-wm{width:96px;right:12px;top:4px;opacity:.32;transform:rotate(-6deg)}}
+/* 워터마크는 모바일에서만. PC에서는 본문 글자와 겹쳐 가독성을 해쳐서 숨김 */
+.pv-wm{position:absolute;z-index:0;pointer-events:none;width:96px;height:auto;right:12px;top:4px;opacity:.3;transform:rotate(-6deg);filter:saturate(.85)}
+@media(min-width:1000px){.pv-wm{display:none}}
 .pv-in{position:relative;z-index:1;padding-block:28px 0;display:grid;gap:40px}
 @media(min-width:1000px){.pv-in{grid-template-columns:minmax(0,1fr) 380px}}
 .crumb{font-size:13px;color:var(--sub)}
@@ -417,7 +428,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .pv-strong span{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 12px}
 .pv-strong span::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--pc)}
 .pv-art{display:none}
-@media(min-width:1000px){.pv-art{display:grid;place-items:center;align-self:start;padding-top:10px}
+@media(min-width:1000px){.pv-art{display:grid;place-items:center;align-self:start;padding-top:10px;position:relative;z-index:1}
   .pv-art .mk{width:150px;height:150px;border-radius:34px;transform:rotate(-10deg);box-shadow:0 30px 50px -24px rgba(0,0,0,.4),0 0 0 10px rgba(255,255,255,.6)}}
 .ptabs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-block:26px 24px;position:relative;z-index:1}
 .ptabs::-webkit-scrollbar{display:none}
@@ -759,7 +770,7 @@ details.opt[open]{display:grid;gap:8px}
   .hero-cap b{font-size:21px}
   .hero .lead{font-size:13.5px}
   .hero .acts{margin-top:18px}
-  .hero-pts{margin-top:16px;font-size:12px}
+  .hero-quote{margin-top:16px;font-size:13px}
   .trial .wrap{padding-block:18px;gap:12px}
   .trial h2{font-size:15.5px}
   .trial .btn{height:42px}
@@ -795,3 +806,11 @@ details.opt[open]{display:grid;gap:8px}
   .gsteps li{padding:14px}
 }
 
+
+/* 대행사 단가 안내 */
+.price-why{max-width:760px;margin:-14px auto 30px;padding:12px 16px;border:1px solid var(--line);border-left:3px solid var(--blue);border-radius:8px;background:var(--soft);font-size:13.5px;line-height:1.6;color:var(--sub);text-align:left}
+.price-why b{display:block;color:var(--ink);font-size:14px;margin-bottom:2px}
+@media(max-width:600px){.price-why{margin:-6px 0 24px;font-size:13px}}
+
+/* 모바일: 히어로 글상자는 이미지 아래에 붙여서 (위 .hero .wrap 높이 지정 무효화) */
+@media(max-width:820px){.hero .wrap{min-height:0}}
