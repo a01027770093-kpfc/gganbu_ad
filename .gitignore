@@ -1,0 +1,7 @@
+# 원본 압축본
+*.zip
+
+# OS
+Thumbs.db
+desktop.ini
+.DS_Store

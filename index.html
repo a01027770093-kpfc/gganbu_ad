@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>깐부애드 GGANBU AD | 개발사 직속 마케팅 총판</title>
+<meta name="description" content="대행사·실행사를 위한 개발사 직속 마케팅 총판 깐부애드. 네이버·카카오·당근·에이블리 마케팅 상품 단가 확인과 간편 신청, 새벽 2시까지 상담.">
+<meta property="og:title" content="깐부애드 GGANBU AD">
+<meta property="og:description" content="개발사 직속 마케팅 총판 · 단가 공개 · 새벽 2시까지 상담">
+<meta property="og:image" content="images/hero.jpg">
+<meta property="og:type" content="website">
+<link rel="icon" href="images/logo-square.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="hd">
+  <div class="wrap">
+    <a class="logo" href="#home" aria-label="깐부애드 홈"><img src="images/logo.png" alt="깐부애드 GGANBU AD" width="145" height="36"></a>
+    <ul class="gnb">
+      <li><a href="#home" data-nav="home">홈</a></li>
+      <li><a href="#about" data-nav="about">회사소개</a></li>
+      <li><a href="#naver" data-nav="prod">상품소개</a><ul id="gnbProd"></ul></li>
+      <li><a href="#academy" data-nav="academy">대행사 창업교육</a></li>
+      <li><a href="#guide" data-nav="guide">이용가이드</a></li>
+      <li><a href="#contact" data-nav="contact">문의</a></li>
+    </ul>
+    <div class="hd-r">
+      <a class="hd-tel" href="tel:15889097"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2"/></svg><span class="num">1588-9097</span></a>
+      <a class="btn btn-kakao btn-sm" data-kakao href="#" target="_blank" rel="noopener">카톡 바로가기</a>
+      <button class="btn btn-blue btn-sm" type="button" data-signup>무료체험</button>
+    </div>
+    <button class="burger" type="button" id="burger" aria-label="메뉴 열기" aria-expanded="false">☰</button>
+  </div>
+</header>
+<nav class="mnav" id="mnav" hidden aria-label="전체 메뉴">
+  <a href="#home">홈</a><a href="#about">회사소개</a><a href="#products">상품소개</a><div class="subs" id="mnavProd"></div><a href="#academy">대행사 창업교육</a><a href="#guide">이용가이드</a><a href="#contact">문의</a>
+  <div class="acts"><a class="btn btn-kakao" data-kakao href="#" target="_blank" rel="noopener">카톡 바로가기</a><a class="btn btn-line" href="tel:15889097">전화 1588-9097</a></div>
+</nav>
+
+<!-- ================= 홈 ================= -->
+<main id="pageHome">
+  <section class="hero" id="home">
+    <div class="hero-media"><img class="hero-img" src="images/hero.jpg" alt="상담 중인 깐부애드 이종현 대표" width="1440" height="810"><div class="hero-cap"><p>개발사 직속 마케팅 총판</p><b>기존 거래처가 있으셔도<br>괜찮습니다.</b></div></div>
+    <div class="wrap">
+      <div class="hero-txt">
+        <p class="eyebrow">개발사 직속 마케팅 총판</p>
+        <h1>기존 거래처가 있으셔도 <br>괜찮습니다.<br><span>깐부애드와 비교해보세요.</span></h1>
+        <p class="lead">대행사·실행사·광고주 모두 상담 가능합니다.<br>단가는 명확하게, 진행은 깔끔하게, 소통은 대표가 직접.</p>
+        <div class="acts">
+          <a class="btn btn-blue arrow" href="#products">상품 보러가기</a>
+          <button class="btn btn-ghost" type="button" data-signup>무료체험하기</button>
+        </div>
+        <p class="hero-pts"><span>개발사 직속 공급</span><span>새벽 2시까지 소통 · 주말 포함</span><span>누락 건 7일 AS</span></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="trial" aria-label="무료체험">
+    <div class="wrap">
+      <div>
+        <p class="q">저희 깐부애드가 처음이시라면?</p>
+        <h2><em>블로그 배포 5건</em><small>OR</small><em>에이블리 활성화 3일</em> 무료체험 해드립니다!</h2>
+      </div>
+      <button class="btn arrow" type="button" data-signup>무료체험하기</button>
+    </div>
+  </section>
+
+  <section class="sec" id="products">
+    <div class="wrap">
+      <div class="sec-head c"><p class="eyebrow">PRODUCTS</p><h2>플랫폼별 주요 상품</h2><p>대행사·실행사 공급가 기준입니다. 타사 대비 가장 강점인 상품만 올려두었으며, 그 외 상품은 문의 바랍니다.</p></div>
+      <div class="pgrid" id="pgrid"></div>
+      <div class="pstrip">
+        <div><b>개발사 직속</b><span>중간 단계 없이 직접 공급</span></div>
+        <div><b>새벽 2시까지 소통</b><span>주말·공휴일 포함</span></div>
+        <div><b>대표 직접 응대</b><span>얼굴 공개하고 직접 소통</span></div>
+        <div><b>1만 건 이상</b><span>대량 주문 단가 별도 협의</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec awards" id="about">
+    <div class="wrap">
+      <div class="sec-head c"><p class="eyebrow">AWARDS</p><h2>지역에서 인정받은 기록</h2><p>원주에서 지역 활동과 봉사를 이어오며 받은 표창입니다.</p></div>
+      <div class="aw-grid">
+        <figure><div class="aw-ph"><img src="images/award-wonju.webp" alt="원주시장 표창패" width="800" height="650"></div><figcaption><b>원주시장 표창</b><small>2025. 12.</small></figcaption></figure>
+        <figure><div class="aw-ph"><img src="images/award-assembly.jpg" alt="국회의원 표창장" width="638" height="900"></div><figcaption><b>국회의원 표창</b><small>2회</small></figcaption></figure>
+        <figure><div class="aw-ph photo"><img src="images/activity.jpg" alt="원주청년소상공인협회 행사에 참석한 이종현 대표" width="576" height="800"></div><figcaption><b>지역 활동</b><small>원주청년소상공인협회</small></figcaption></figure>
+      </div>
+      <div class="act"><span><b>현재</b>원주청년소상공인협회 사무국장</span><span><b>현재</b>원주미래로타리클럽 부회장 (강원도 최초 청년 로타리)</span></div>
+    </div>
+  </section>
+
+  <section class="sec ceo-sec">
+    <img class="ceo-banner" src="images/ceo-banner.jpg" alt="깐부애드는 강남이 아니라 원주에 있습니다. 깐부애드 대표 이종현" width="1600" height="900">
+    <div class="wrap">
+      <figure class="ceo-ph"><img src="images/ceo.jpg" alt="깐부애드 이종현 대표" width="620" height="827"><figcaption><span>깐부애드 대표</span><b>이종현</b></figcaption></figure>
+      <div>
+        <p class="eyebrow">CEO</p>
+        <h2>깐부애드는 강남이 아니라<br><span>원주</span>에 있습니다.</h2>
+        <div class="ceo-say">
+          <p>원주에서 지역 활동과 봉사를 이어가는 세 아이의 아빠입니다.</p>
+          <p>사람을 직접 만나고, 얼굴을 드러내고, 오래 관계를 이어가는 방식으로 사업하고 싶습니다. 개발사 직속 총판이라 요청하신 내용이 바로 전달되고, 새벽 2시까지 직접 답하겠습니다.</p>
+          <p><strong>숨어서 일하지 않습니다. 직접 뵙고 소통하겠습니다.</strong></p>
+        </div>
+        <p class="sign">깐부애드 대표<b>이종현</b></p>
+        <ul class="hist">
+          <li><small>현재 활동</small><b>원주청년소상공인협회 사무국장</b></li>
+          <li><small>현재 활동</small><b>원주미래로타리클럽 부회장</b></li>
+          <li><small>수상</small><b>원주시장 표창</b></li>
+          <li><small>수상</small><b>국회의원 표창 2회</b></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec contact" id="contact">
+    <div class="wrap">
+      <div class="box">
+        <div class="c-left">
+          <p class="eyebrow" style="color:#8fb4ff">CONTACT</p>
+          <h2>간편 문의</h2>
+          <p>가격만 물어보셔도 괜찮습니다.<br>남겨주시면 바로 연락드립니다.</p>
+          <div class="c-item"><span class="ci"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2"/></svg></span><div><small>대표 번호</small><b class="num">1588-9097</b></div></div>
+          <div class="c-item"><span class="ci"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><div><small>상담 시간</small><b>오전 10시 ~ 새벽 2시</b><small>주말·공휴일 포함</small></div></div>
+          <div class="c-item"><span class="ci"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg></span><div><small>카카오톡 오픈채팅</small><b>깐부애드 상담방</b></div></div>
+          <a class="btn btn-kakao" data-kakao href="#" target="_blank" rel="noopener">카톡 바로가기</a>
+          <div class="c-note"><span>대행사·실행사 전용 단톡방 개설</span><span>가능한 것과 어려운 것 구분해서 답변</span><span>동일 상품 1만 건 이상 단가 협의</span></div>
+        </div>
+        <form class="c-form" id="cform" novalidate>
+          <h3>문의 남기기</h3>
+          <div><span class="lbl">고객 유형</span><div class="pills">
+            <label class="pill"><input type="radio" name="ct" value="대행사" checked><span>대행사</span></label>
+            <label class="pill"><input type="radio" name="ct" value="실행사"><span>실행사</span></label>
+            <label class="pill"><input type="radio" name="ct" value="광고주"><span>광고주·기업</span></label>
+          </div></div>
+          <div><span class="lbl">관심 플랫폼 (여러 개 선택 가능)</span><div class="pills" id="cPlat"></div></div>
+          <div class="g2">
+            <div><label class="lbl" for="cName">이름 <span class="req">*</span></label><input class="inp" id="cName" autocomplete="name" placeholder="홍길동"></div>
+            <div><label class="lbl" for="cCo">업체명</label><input class="inp" id="cCo" autocomplete="organization" placeholder="업체명"></div>
+          </div>
+          <div><label class="lbl" for="cPhone">연락처 <span class="req">*</span></label><input class="inp" id="cPhone" type="tel" inputmode="numeric" placeholder="010-0000-0000" autocomplete="tel"></div>
+          <div><label class="lbl" for="cMsg">문의 내용</label><textarea id="cMsg" placeholder="필요한 상품, 수량, 일정 등을 적어주세요."></textarea></div>
+          <label class="agree"><input type="checkbox" id="cAgree"><span>[필수] 개인정보 수집·이용 동의 (이름·업체명·연락처를 상담 연락에만 사용, 상담 종료 후 1년 보관)</span></label>
+          <p class="err" id="cErr" hidden></p>
+          <button class="btn btn-blue arrow" type="submit" style="height:50px;font-size:15px">상담 신청하기</button>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ================= 이용가이드 ================= -->
+<main id="pageGuide" hidden>
+  <section class="ghero"><div class="wrap"><p class="crumb"><a href="#home">홈</a> › 이용가이드</p><h1>이용가이드</h1><p>상품 선택부터 결과 확인까지, 처음이셔도 쉽게 이용하실 수 있습니다.</p></div></section>
+  <section class="wrap" style="padding-block:24px 96px">
+    <ol class="gsteps">
+      <li><b>상품 선택</b><span>상품소개에서 플랫폼과 상품을 고르고 수량을 정합니다.</span></li>
+      <li><b>정보 입력</b><span>작업할 주소(URL), 업체명, 연락처를 입력합니다.</span></li>
+      <li><b>신청 완료</b><span>담당자가 진행 가능 여부를 확인해 연락드립니다.</span></li>
+      <li><b>입금 후 진행</b><span>계좌이체 안내를 받고, 입금 확인 후 바로 시작합니다.</span></li>
+      <li><b>결과 확인</b><span>진행 결과를 확인하고, 누락 건은 AS를 요청합니다.</span></li>
+    </ol>
+    <div class="ginfo">
+      <div><h3>결제 안내</h3><p>현재는 계좌이체로 결제합니다. 신청 후 확인 연락 때 계좌 정보를 안내드립니다.</p></div>
+      <div><h3>AS 안내</h3><p>누락 건에 대해서는 7일간 AS를 지원합니다. 상품별 세부 AS 기준은 진행 전 안내드립니다.</p></div>
+      <div><h3>무료체험 안내</h3><p>처음 이용하시는 분께 블로그 배포 5건 또는 에이블리 활성화 3일 무료체험을 드립니다. 간편가입 후 쿠폰이 발급됩니다.</p></div>
+    </div>
+    <div class="gfaq faq">
+      <h2>자주 묻는 질문</h2>
+      <details><summary>기존 거래처가 있어도 이용할 수 있나요?</summary><p>네. 서브 파트너로 필요한 상품만 비교해 보시고 선택하시면 됩니다.</p></details>
+      <details><summary>계정 비밀번호를 알려줘야 하나요?</summary><p>아니요. 작업할 주소(URL)만 받습니다. 비밀번호는 요청하지 않습니다.</p></details>
+      <details><summary>진행 기간은 얼마나 걸리나요?</summary><p>상품과 수량에 따라 다릅니다. 신청 확인 연락 때 일정을 함께 안내드립니다.</p></details>
+      <details><summary>1만 건 이상 대량 주문은 어떻게 하나요?</summary><p>동일 상품 1만 건 이상은 단가를 따로 안내드립니다. 카카오톡이나 대표 번호로 수량을 알려주세요.</p></details>
+      <details><summary>늦은 시간에도 연락되나요?</summary><p>오전 10시부터 새벽 2시까지 소통합니다. 주말·공휴일도 같습니다.</p></details>
+      <details><summary>대행사·실행사 전용 단톡방이 있나요?</summary><p>네. 거래를 시작한 대행사·실행사에는 전용 단톡방을 개설해 드립니다.</p></details>
+    </div>
+    <div class="gcta"><div><b>궁금한 점은 바로 물어보세요</b><p style="color:#c3cde4;font-size:14px;margin-top:4px">대표 번호 1588-9097 · 오전 10시 ~ 새벽 2시</p></div><div><a class="btn btn-kakao" data-kakao href="#" target="_blank" rel="noopener">카톡 바로가기</a><a class="btn btn-blue" href="#naver">상품 보러가기</a></div></div>
+  </section>
+</main>
+
+<!-- ================= 창업교육 ================= -->
+<main id="pageAcademy" hidden>
+  <section class="ax-hero">
+    <div class="ax-media"><img id="acImg" alt="깐부애드 이종현 대표" width="1440" height="810"></div>
+    <div class="wrap ax-in">
+      <p class="crumb"><a href="#home">홈</a> › 대행사 창업교육</p>
+      <p class="ax-eb">MARKETING AGENCY START-UP</p>
+      <h1>마케팅 대행사 창업,<br>처음이라면 <em>제대로 배우고</em><br>시작하세요.</h1>
+      <p class="lead">상품은 어디서 공급받는지, 얼마에 팔아야 하는지, 고객은 어떻게 찾는지.<br>처음 시작할 때 막히는 실무를 실제 대행사 운영 순서대로 알려드립니다.</p>
+      <div class="ax-acts"><a class="btn ax-gold arrow" href="#ac-curri">교육과정 보기</a><a class="btn btn-ghost arrow" href="#ac-form">창업교육 문의</a></div>
+      <p class="ax-foot">실제 사업 운영과 연결된, 실전형 창업 교육입니다.</p>
+    </div>
+  </section>
+  <div class="ax-notice"><div class="wrap"><div><b>이미 대행사를 운영하고 계신 대표님이라면?</b><p>별도의 교육 없이 기존과 동일하게 깐부애드 상품과 서비스를 이용하시면 됩니다.</p></div><a class="btn btn-ghost btn-sm arrow" href="#products">상품 보러가기</a></div></div>
+
+  <section class="wrap ax-now">
+    <div class="ax-now-h">
+      <p class="eyebrow">WHY THIS PROGRAM</p>
+      <h2>왜 지금, 마케팅 대행사 창업인가요?</h2>
+      <p>마케팅이 필요한 소상공인과 기업은 많지만, 믿고 맡길 곳을 찾기는 여전히 어렵습니다. 마케팅 대행사는 매장 임대나 인테리어 없이, 지식과 영업력으로 시작할 수 있는 사업입니다.</p>
+    </div>
+    <ol class="ax-now-l">
+      <li><b>초기 비용 부담이 적습니다</b><p>매장 임대, 인테리어 같은 큰 초기 비용 없이 시작할 수 있습니다.</p></li>
+      <li><b>기초부터 실무까지 순서대로</b><p>업계 용어부터 상품, 영업, 운영까지 처음 시작하는 분도 따라올 수 있게 구성했습니다.</p></li>
+      <li><b>실제 사업으로 연결됩니다</b><p>이론에 그치지 않고, 교육 중에 내 상품표와 사업 방향을 직접 만듭니다.</p></li>
+    </ol>
+  </section>
+
+  <section class="ax-who">
+    <div class="wrap">
+      <div class="ax-who-d"><img class="ax-who-img" src="images/for-whom.jpg" alt="이런 분들에게 필요한 과정입니다. 01 처음 시작하는 분, 02 시작은 했지만 경험이 부족한 분, 03 혼자 배우며 운영 중인 분" width="1448" height="1086"><img class="ax-who-logo" src="images/logo-square.webp" alt="깐부애드" width="440" height="386"></div>
+      <div class="ax-who-m">
+        <img class="ax-who-logo-m" src="images/logo-square.webp" alt="" width="440" height="386">
+        <h2>이런 분들에게 필요한 과정입니다.</h2>
+        <ol>
+          <li><span>처음 시작하는 분</span><q>마케팅 대행사를 해보고 싶은데, 어디서부터 시작해야 할지 모르겠습니다.</q></li>
+          <li><span>시작은 했지만 경험이 부족한 분</span><q>상품은 몇 개 알고 있는데, 고객에게 어떻게 팔아야 할지 막막합니다.</q></li>
+          <li><span>혼자 배우며 운영 중인 분</span><q>작업은 받고 있는데, 견적·계약·AS가 매번 어렵습니다.</q></li>
+        </ol>
+      </div>
+      <p class="ax-not">이미 충분한 실무 경험이 있는 대행사 대표님에게 교육을 권하는 과정은 아닙니다.</p>
+    </div>
+  </section>
+
+  <section class="ax-why">
+    <img class="ax-why-img" src="images/why-gganbu.jpg" alt="왜 깐부애드인가요? 폐쇄적인 업계 구조, 영업자 출신 개발사 직속 총판, 개발사 특징까지 함께 이해, 더 빠르고 안정적인 시작" width="1600" height="900">
+    <div class="wrap ax-why-m">
+      <p class="ax-eb">WHY GGANBU AD</p>
+      <h2>왜 <span>깐부애드</span>인가요?</h2>
+      <p>마케팅 업계는 생각보다 폐쇄적입니다. 처음 시작하는 분에게는 상품을 어디서 받고, 어떻게 팔고, 어떻게 운영해야 하는지 알기 쉽지 않습니다. 깐부애드는 개발사 직속 총판이자 영업자 출신 대표의 실무 경험을 바탕으로, <b>더 빠르고 안정적인 시작을 돕습니다.</b></p>
+      <ol>
+        <li><b>폐쇄적인 업계 구조</b><p>마케팅 업계 특성상 정보가 쉽게 공유되지 않습니다. 처음 시작하는 분일수록 상품 구조와 운영 흐름을 파악하기 어렵습니다.</p></li>
+        <li><b>영업자 출신 개발사 직속 총판</b><p>영업 경험과 실무 감각을 갖춘 개발사 직속 총판은 흔하지 않습니다. 상품만 아는 것이 아니라, 실제로 어떻게 팔아야 하는지까지 함께 배울 수 있습니다.</p></li>
+        <li><b>개발사 특징까지 함께 이해</b><p>개발사 원청 직속 구조이기 때문에 상품의 특징과 진행 방식까지 더 깊이 이해할 수 있습니다. 단순 중개가 아니라 구조를 알고 시작할 수 있습니다.</p></li>
+        <li><b>더 빠르고 안정적인 시작</b><p>저렴한 공급가로 납품받고 운영의 기준까지 함께 익히면, 남들은 2~3년 걸리는 시행착오를 더 빠르고 안정적으로 줄여갈 수 있습니다.</p></li>
+      </ol>
+      <p class="ax-key">배우는 데서 끝나는 것이 아니라, 실제 운영까지 연결되는 구조를 만듭니다.</p>
+    </div>
+  </section>
+
+  <section class="ax-curri" id="ac-curri">
+    <div class="wrap">
+      <img class="ax-curri-img" src="images/curriculum.jpg" alt="8주간의 체계적인 커리큘럼: 1단계 기초교육 3주, 2단계 실무교육 2주, 3단계 실습 및 사업자 만들기 2주, 4단계 사례공유 및 노하우 1주" width="1600" height="900">
+      <details class="ax-curri-m"><summary>주차별 자세히 보기</summary>
+      <div class="ax-stages">
+        <section><header class="g"><small>1단계 · 기초교육</small><b>3주</b></header><ol>
+          <li><span>1주차</span><div><b>업계 이해와 대행사 구조</b><p>업계 동향·용어 기초, 대행사·실행사·총판의 역할</p></div></li>
+          <li><span>2주차</span><div><b>상품과 공급 구조</b><p>플랫폼별 상품 특징, 공급 구조 이해</p></div></li>
+          <li><span>3주차</span><div><b>단가·마진·견적</b><p>공급가·판매가·마진 계산, 제안서 기초</p></div></li>
+        </ol></section>
+        <section><header><small>2단계 · 실무교육</small><b>2주</b></header><ol>
+          <li><span>4주차</span><div><b>고객 찾기와 상담</b><p>타깃 업종 선정, 상담 흐름, 영업 기초</p></div></li>
+          <li><span>5주차</span><div><b>상품 진행과 관리</b><p>실제 진행 방식, 작업 의뢰, 일정·누락·AS 관리</p></div></li>
+        </ol></section>
+        <section><header><small>3단계 · 실습 및 사업 만들기</small><b>2주</b></header><ol>
+          <li><span>6주차</span><div><b>보고와 재계약</b><p>결과 보고, 고객관리, 재계약 실무</p></div></li>
+          <li><span>7주차</span><div><b>내 사업 설계</b><p>사업 방향 설정, 내 상품표 만들기, 운영 효율화</p></div></li>
+        </ol></section>
+        <section><header><small>4단계 · 사례 공유</small><b>1주</b></header><ol>
+          <li><span>8주차</span><div><b>사례와 개인 피드백</b><p>실무 사례 공유, 1년 목표·월별 계획, 개인별 피드백</p></div></li>
+        </ol></section>
+      </div></details>
+    </div>
+  </section>
+
+  <section class="ax-edu">
+    <img class="ax-edu-img" src="images/education-info.jpg" alt="교육 안내: 마케팅 대행사 창업교육 8주 과정, 정가 2,000만 원, 현재 프로모션 50명 한정 1,000만 원(부가세 별도)" width="1600" height="900">
+    <div class="wrap ax-edu-m">
+      <p class="eyebrow" style="text-align:center">MARKETING AGENCY START-UP CLASS</p>
+      <h2>교육 <span>안내</span></h2>
+      <p class="sub">마케팅 대행사 창업교육 · 8주 과정</p>
+      <div class="ax-edu-price">
+        <small>한정 프로모션</small>
+        <p class="was">정가 <s>2,000만 원</s></p>
+        <p class="now"><em>50명 한정</em><b class="num">1,000만 원</b></p>
+        <p class="vat">부가세 별도</p>
+      </div>
+      <p class="meta"><span>온라인 + 현장 병행</span><span>최소 1년 운영 케어</span><span>대상: 예비창업자 / 초기 운영자</span></p>
+      <h3>깐부애드 교육, 왜 다를까요?</h3>
+      <dl>
+        <div><dt>주의</dt><dd>시중의 300만 원·600만 원대 교육은 실무 관련 케어가 없는 경우가 많습니다.</dd></div>
+        <div><dt>당사만의 포함 내용</dt><dd>실무 케어 + KPFC 사업 자문까지 포함되어 정부 정책자금 자문까지 연결해 드립니다.</dd></div>
+        <div><dt>교육 후까지 케어</dt><dd>교육이 끝나도 실제 사업까지 케어되는 곳은 국내에 저희 '깐부애드'가 유일합니다.</dd></div>
+        <div><dt>진행 방식</dt><dd>교육 전에는 1시간 미팅을 먼저 진행합니다. 인터뷰 후 정말 간절하신 분들, 열정 있으신 분들만 함께합니다.</dd></div>
+      </dl>
+      <div class="why50"><b>50명 한정 · 50% 프로모션 진행 이유</b><p>추후 마케팅 연합으로 다른 곳들보다 훨씬 메리트 있는 연합 단가를 받아올 수 있도록 파트너 양성을 목표로 하고 있습니다. 폐쇄적인 마케팅 시장에서 낙오되지 않고, 마케팅 연합으로 1인 사장님들도 더 좋은 단가와 노하우, 업계 동향을 서로 공유할 수 있도록 하기 위함입니다.</p></div>
+    </div>
+  </section>
+
+  <section class="ax-care">
+    <div class="wrap">
+      <div class="ax-care-h"><p class="eyebrow">AFTER CARE</p><h2>8주가 끝나도<br>혼자 두지 않습니다.</h2><p>교육이 끝난 뒤 실제로 운영하면서 생기는 상황까지 함께합니다.</p></div>
+      <ol>
+        <li><b>최소 1년 운영 케어</b><p>운영하면서 생기는 질문과 막히는 부분을 언제든 물어보실 수 있습니다.</p></li>
+        <li><b>상품 지속 공급</b><p>교육에서 배운 상품만으로 끝나지 않고, 새로운 판매 상품을 계속 접할 수 있습니다.</p></li>
+        <li><b>사업 방향 상담</b><p>사업자 설립, 상품 구성, 운영 방향 등 개별 상담을 지원합니다.</p></li>
+        <li><b>대행사 네트워크 <small>구축 예정</small></b><p>대행사끼리 정보와 노하우를 나눌 수 있는 네트워크를 운영할 예정입니다.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="ax-kpfc">
+    <div class="wrap">
+      <p>교육 종료 후, 당사와 MOU 되어 있는 <b>한국정책자금지원센터(KPFC)</b>를 통해<br>사업 자문 및 정책자금 자문까지 연결해 드립니다.</p>
+      <img class="ax-kpfc-logo" src="images/kpfc.png" alt="한국정책자금지원센터 KPFC" width="446" height="120">
+    </div>
+  </section>
+
+  <section class="ax-apply" id="ac-form">
+    <div class="wrap">
+      <div class="ax-end">
+        <p class="ax-eb">CONSULTATION</p>
+        <h2>마케팅 대행사를<br>제대로 한번 시작해보고 싶다면.</h2>
+        <p>현재 상황부터 먼저 이야기해 보세요.<br>교육이 필요한 단계인지부터 확인해 드립니다.</p>
+        <p class="ax-3"><span>교육 과정 안내</span><span>개인별 맞춤 상담</span><span>현재 상황에 맞는 방향 제안</span></p>
+        <div class="ax-acts"><a class="btn btn-kakao" data-kakao href="#" target="_blank" rel="noopener">카카오톡 교육문의</a><a class="btn btn-ghost" href="tel:15889097">1588-9097</a></div>
+        <p class="ax-sub">이미 대행사를 운영 중이며 상품 공급 및 제휴가 필요하신 경우 <a href="#contact">대행사 제휴문의 →</a></p>
+      </div>
+      <form id="aform" class="ax-form" novalidate>
+        <h3>무료 상담 신청</h3>
+        <div class="g2">
+          <div><label class="lbl" for="aName">이름 <span class="req">*</span></label><input class="inp" id="aName" autocomplete="name"></div>
+          <div><label class="lbl" for="aPhone">연락처 <span class="req">*</span></label><input class="inp" id="aPhone" type="tel" inputmode="numeric" placeholder="010-0000-0000" autocomplete="tel"></div>
+        </div>
+        <div><span class="lbl">현재 상황</span><div class="pills">
+          <label class="pill"><input type="radio" name="as" value="처음 시작" checked><span>처음 시작</span></label>
+          <label class="pill"><input type="radio" name="as" value="경험 부족"><span>시작했지만 경험 부족</span></label>
+          <label class="pill"><input type="radio" name="as" value="혼자 운영 중"><span>혼자 운영 중</span></label>
+        </div></div>
+        <div><label class="lbl" for="aMsg">궁금한 점</label><textarea id="aMsg" placeholder="희망 시작 시기, 궁금한 점 등을 적어주세요."></textarea></div>
+        <label class="agree"><input type="checkbox" id="aAgree"><span>[필수] 개인정보 수집·이용 동의 (상담 연락에만 사용, 상담 종료 후 1년 보관)</span></label>
+        <p class="err" id="aErr" hidden></p>
+        <button class="btn btn-blue arrow" type="submit" style="height:50px;font-size:15px">상담 신청하기</button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<!-- ================= 상품 페이지 ================= -->
+<main id="pageProd" hidden>
+  <section class="pv"><img class="pv-wm" id="pvWm" alt="" aria-hidden="true">
+    <div class="wrap pv-in">
+      <div>
+        <p class="crumb"><a href="#home">홈</a> › 상품소개 › <span id="pvCrumb"></span></p>
+        <h1 id="pvTitle"></h1>
+        <p class="tagline" id="pvTag"></p>
+        <p class="lead" id="pvLead"></p>
+        <p class="pv-strong"><span>개발사 직속</span><span>새벽 2시까지 소통</span><span>7일 AS</span></p>
+      </div>
+      <div class="pv-art" id="pvArt" aria-hidden="true"></div>
+    </div>
+    <div class="wrap"><nav class="ptabs" id="ptabs" aria-label="플랫폼 선택"></nav></div>
+  </section>
+  <div class="wrap pbody">
+    <div class="pmain">
+      <div class="why" id="pvWhy"></div>
+      <h3 class="h3" id="pvListTitle"></h3>
+      <p class="h3-s" id="pvListSub"></p>
+      <p class="more-note">그 외에도 다양한 마케팅 상품이 있습니다. 이곳에는 <b>타사 대비 가장 강점인 상품</b>만 올려두었으며, 그 외 필요한 상품은 <a data-kakao href="#" target="_blank" rel="noopener">문의</a> 바랍니다.</p>
+      <div class="plist" id="pvList"></div>
+      <p class="note" id="pvNote"></p>
+      <div id="pvLinks"></div>
+      <div class="steps">
+        <h3>진행 절차</h3>
+        <ol>
+          <li><b>상품 선택</b>상품과 수량을 고릅니다.</li>
+          <li><b>정보 입력</b>작업 주소와 연락처를 입력합니다.</li>
+          <li><b>신청 완료</b>담당자가 확인 후 연락드립니다.</li>
+          <li><b>작업 진행</b>입금 확인 후 바로 시작합니다.</li>
+          <li><b>결과 확인</b>누락 건은 AS를 요청할 수 있습니다.</li>
+        </ol>
+      </div>
+      <p class="pledge"><b>기존 거래처가 있으셔도 괜찮습니다.</b> 단가와 진행 조건만 비교해 보세요. 얼굴을 공개하고 직접 소통하는 깐부애드가 함께하겠습니다.</p>
+    </div>
+
+    <aside class="pside">
+      <div class="quote"><p>“기존 거래처가 있으셔도 괜찮습니다. 단가와 진행 조건만 비교해보세요.”<small>깐부애드 대표<b>이종현</b></small></p><img src="images/ceo.jpg" alt="이종현 대표" width="104" height="139"></div>
+
+      <form class="obox" id="obox" novalidate aria-label="신청하기">
+        <h3>신청하기</h3>
+        <div id="oDone" hidden></div>
+        <div id="oForm" style="display:grid;gap:12px">
+          <div class="pick" id="pick">
+            <button class="pick-btn" type="button" id="pickBtn" aria-haspopup="listbox" aria-expanded="false"><span id="pickMark"></span><span><b id="pickName"></b><small id="pickPrice"></small></span></button>
+            <ul class="pick-list" id="pickList" role="listbox" hidden></ul>
+          </div>
+          <div class="kv"><span>단가</span><span class="v num" id="oUnit"></span></div>
+          <div class="kv" id="oQtyRow"><span id="oQtyLbl">수량</span><div class="stepper"><button type="button" id="oMinus" aria-label="수량 줄이기">−</button><input id="oQty" class="num" inputmode="numeric" aria-label="수량"><button type="button" id="oPlus" aria-label="수량 늘리기">+</button></div></div>
+          <div class="kv" id="oPerRow" hidden><span>이용 기간</span><div class="operiod" id="oPer"></div></div>
+          <div class="ototal"><span>예상 금액</span><b class="num" id="oTotal"></b></div>
+          <p class="hint warn" id="oHint" hidden>1만 건 이상은 단가를 따로 안내드립니다.</p>
+          <div><label class="lbl" for="oUrl">작업할 주소 (URL) <span class="req">*</span></label><input class="inp" id="oUrl" type="url" inputmode="url" placeholder="https://"></div>
+          <div class="g2" style="gap:8px">
+            <div><label class="lbl" for="oCo">업체명 <span class="req">*</span></label><input class="inp" id="oCo" autocomplete="organization"></div>
+            <div><label class="lbl" for="oPhone">연락처 <span class="req">*</span></label><input class="inp" id="oPhone" type="tel" inputmode="numeric" placeholder="010-0000-0000" autocomplete="tel"></div>
+          </div>
+          <details class="opt"><summary>요청사항 추가 (선택)</summary><input class="inp" id="oMemo" aria-label="요청사항" placeholder="키워드, 지역, 업종, 희망 시작일 등"></details>
+          <label class="agree"><input type="checkbox" id="oAgree"><span>[필수] 개인정보 수집·이용 동의</span></label>
+          <p class="err" id="oErr" hidden></p>
+          <button class="btn btn-blue arrow ogo" type="submit">신청하기</button>
+          <p class="hint" style="text-align:center">신청 후 진행 가능 여부를 확인해 연락드립니다.</p>
+        </div>
+      </form>
+
+      <div class="side-card">
+        <h3><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z M8.5 12l2.5 2.5 4.5-5"/></svg>AS 안내</h3>
+        <p>누락 건에 대해서는 7일간 AS를 지원합니다.<br>상품별 세부 AS 기준은 진행 전 안내드립니다.</p>
+      </div>
+      <div class="side-card faq">
+        <h3><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 114 2c-1 .6-1.5 1.1-1.5 2.2 M12 17h.01"/></svg>자주 묻는 질문</h3>
+        <details><summary>결제는 어떻게 하나요?</summary><p>신청 후 확인 연락 때 계좌이체 정보를 안내드립니다. 입금 확인 후 바로 진행합니다.</p></details>
+        <details><summary>기존 거래처가 있어도 이용할 수 있나요?</summary><p>네. 서브 파트너로 필요한 상품만 비교해 보시고 선택하시면 됩니다.</p></details>
+        <details><summary>진행 기간은 얼마나 걸리나요?</summary><p>상품과 수량에 따라 다릅니다. 신청 확인 연락 때 일정을 함께 안내드립니다.</p></details>
+      </div>
+    </aside>
+  </div>
+  <div class="mbar"><div><small id="mbName"></small><b class="num" id="mbTotal"></b></div><button class="btn btn-blue" type="button" id="mbGo">신청하기</button></div>
+</main>
+
+<footer class="ft">
+  <div class="wrap">
+    <img src="images/logo-footer.png" alt="깐부애드" width="124" height="30">
+    <p class="l"><span>깐부애드 KKANBU AD</span><span>대표 <b>이종현</b></span><span>강원 원주</span><span>대표 번호 <b class="num">1588-9097</b></span><span>상담 오전 10시 ~ 새벽 2시 (주말·공휴일 포함)</span></p>
+    <p>개발사 직속 마케팅 총판 · 대행사·실행사·광고주 상담 가능</p>
+  </div>
+</footer>
+
+<div class="mdock" id="mdock"><a class="btn btn-kakao" data-kakao href="#" target="_blank" rel="noopener">카톡 바로가기</a><a class="btn btn-line" href="tel:15889097">전화 1588-9097</a></div>
+<div class="dim" id="dim" hidden><div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle"></div></div>
+<div class="toast" id="toast" hidden></div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
