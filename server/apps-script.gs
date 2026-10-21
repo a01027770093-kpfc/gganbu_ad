@@ -13,7 +13,12 @@ const SETTINGS = {
   EMAIL_TO: ''            /* 메일로도 받으려면 주소 입력 (비우면 보내지 않음) */
 };
 
-const HEADERS = ['접수시각', '접수번호', '종류', '연락처', '내용', '처리상태', '원본'];
+/* 시트 첫 줄. COLUMNS 를 고치면 여기도 자동으로 따라갑니다. */
+function headers_() {
+  return ['접수시각', '접수번호', '종류']
+    .concat(COLUMNS.map(function (c) { return c[0]; }))
+    .concat(['기타', '처리상태', '원본']);
+}
 
 function doPost(e) {
   try {
@@ -38,10 +43,37 @@ function doGet() {
   return json_({ ok: true, msg: '깐부애드 접수 서버 동작 중' });
 }
 
+/* 자주 쓰는 항목은 칸을 따로 두고, 나머지는 "기타"에 모아 둡니다.
+   왼쪽이 시트 칸 이름, 오른쪽이 폼에서 올 수 있는 항목 이름들입니다. */
+const COLUMNS = [
+  ['이름', ['이름']],
+  ['업체명', ['업체명']],
+  ['연락처', ['연락처']],
+  ['플랫폼', ['플랫폼', '관심 플랫폼']],
+  ['상품·항목', ['상품', '받을 체험']],
+  ['수량', ['수량']],
+  ['금액', ['예상 금액']],
+  ['작업 주소', ['작업 주소', '체험 주소']],
+  ['내용', ['문의 내용', '궁금한 점']]
+];
+
 function saveRow_(no, kind, fields, body) {
   const sh = sheet_(SETTINGS.SHEET_NAME);
-  const text = Object.keys(fields).map(function (k) { return k + ': ' + fields[k]; }).join('\n');
-  sh.appendRow([new Date(), no, kind, fields['연락처'] || '', text, '신규', JSON.stringify(body)]);
+  const used = {};
+  const cols = COLUMNS.map(function (c) {
+    let v = '';
+    c[1].forEach(function (key) {
+      if (!v && fields[key] && fields[key] !== '-') { v = fields[key]; used[key] = true; }
+    });
+    return v;
+  });
+  /* 위에서 쓰지 않은 항목은 전부 기타 칸에 */
+  const rest = Object.keys(fields)
+    .filter(function (k) { return !used[k] && fields[k] && fields[k] !== '-'; })
+    .map(function (k) { return k + ': ' + fields[k]; })
+    .join('\n');
+
+  sh.appendRow([new Date(), no, kind].concat(cols, [rest, '신규', JSON.stringify(body)]));
 }
 
 function notify_(no, kind, fields) {
@@ -63,18 +95,35 @@ function notify_(no, kind, fields) {
 
 function sheet_(name) {
   const ss = SpreadsheetApp.openById(SETTINGS.SHEET_ID);
+  const want = headers_();
   let sh = ss.getSheetByName(name);
-  if (!sh) sh = ss.insertSheet(name);
+
+  /* 칸 구성이 바뀌었으면 기존 탭은 이름을 바꿔 남겨 두고 새로 만듭니다 (자료는 지우지 않습니다) */
+  if (sh && sh.getLastRow() > 0) {
+    const now = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0].join('|');
+    if (now !== want.join('|')) {
+      let n = 1;
+      while (ss.getSheetByName(name + '_이전' + n)) n++;
+      sh.setName(name + '_이전' + n);
+      sh = null;
+    }
+  }
+  if (!sh) sh = ss.getSheetByName(name) || ss.insertSheet(name);
+
   if (sh.getLastRow() === 0) {
-    sh.appendRow(HEADERS);
-    sh.getRange(1, 1, 1, HEADERS.length).setFontWeight('bold');
+    sh.appendRow(want);
+    sh.getRange(1, 1, 1, want.length).setFontWeight('bold').setBackground('#eef4ff');
     sh.setFrozenRows(1);
+    sh.setColumnWidth(1, 145);  /* 접수시각 */
+    sh.setColumnWidth(2, 125);  /* 접수번호 */
+    sh.setColumnWidth(want.length, 60); /* 원본은 좁게 */
   }
   return sh;
 }
 
 function logError_(err, e) {
-  const sh = sheet_('오류');
+  const ss = SpreadsheetApp.openById(SETTINGS.SHEET_ID);
+  const sh = ss.getSheetByName('오류') || ss.insertSheet('오류');
   if (sh.getLastRow() === 0) sh.appendRow(['시각', '오류', '받은 내용']);
   sh.appendRow([new Date(), String(err), e && e.postData ? e.postData.contents : '']);
 }
