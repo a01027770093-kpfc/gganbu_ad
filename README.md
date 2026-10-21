@@ -22,3 +22,6 @@ node .claude/serve.js
 ## 배포
 
 GitHub Pages(main 브랜치 루트)로 서비스됩니다.
+
+- 사이트: https://a01027770093-kpfc.github.io/gganbu_ad/
+- main에 푸시하면 1~2분 내 자동 반영됩니다.
