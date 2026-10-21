@@ -356,7 +356,8 @@ $("#oPlus").onclick = () => oSet(sel[curItem.id] + stepOf(curItem));
 $("#oQty").onchange = () => oSet(parseQ($("#oQty").value));
 $("#mbGo").onclick = () => $("#obox").scrollIntoView({ behavior: "smooth", block: "start" });
 phoneFmt($("#oPhone"));
-(() => { const me = store.get(); if (me.co) { $("#oCo").value = me.co; $("#oPhone").value = me.phone || ""; $("#oAgree").checked = true; } })();
+/* 업체명·연락처만 기억해 다시 채웁니다. 개인정보 동의는 매번 직접 체크해야 합니다 */
+(() => { const me = store.get(); if (me.co) { $("#oCo").value = me.co; $("#oPhone").value = me.phone || ""; } })();
 $("#obox").addEventListener("submit", async e => {
   e.preventDefault();
   const err = $("#oErr"), fail = (m, el) => { err.textContent = m; err.hidden = false; el.focus(); };

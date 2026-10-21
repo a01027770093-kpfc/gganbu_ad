@@ -96,6 +96,17 @@ function 채팅ID찾기() {
   Logger.log(res.getContentText());
 }
 
+/* 저장이 어디로 가는지 확인하는 진단용 함수.
+   편집기에서 실행한 뒤 "실행 로그"를 보면 파일 이름과 탭 목록이 나옵니다. */
+function 진단() {
+  const ss = SpreadsheetApp.openById(SETTINGS.SHEET_ID);
+  Logger.log("파일 이름: " + ss.getName());
+  Logger.log("파일 주소: " + ss.getUrl());
+  ss.getSheets().forEach(function (sh) {
+    Logger.log("탭 [" + sh.getName() + "] 마지막 줄 = " + sh.getLastRow());
+  });
+}
+
 function json_(o) {
   return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON);
 }
